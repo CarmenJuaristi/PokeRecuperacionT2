@@ -19,8 +19,7 @@ public class JSONArrayRequestAuthenticated  extends JsonArrayRequest {
 
     public JSONArrayRequestAuthenticated (int method, String url, @Nullable JSONArray jsonRequest,
                                           Response.Listener<JSONArray> listener,
-                                          @Nullable Response.ErrorListener errorListener,
-                                          Context context){
+                                          @Nullable Response.ErrorListener errorListener){
         super(method,url,jsonRequest,listener,errorListener);
         this.context = context;
     }

@@ -34,31 +34,36 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.recyclerView);
 
-        JsonObjectRequest request = new JsonObjectRequest(
+        JSONArrayRequestAuthenticated request = new JSONArrayRequestAuthenticated(
                 Request.Method.GET,
                 "https://pokeapi.co/api/v2/pokemon",
                 null,
                 new Response.Listener<JSONArray>() {
                 @Override
-                public void onResponse (JSONArray response){
+                public void onResponse (JSONArray response) {
                     List<PokemonData> allThePokemons = new ArrayList<>();
-                    for (int i = 0; i < response.length(); i++){
-                        try{
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
                             //Convertimos cada objeto json en un Adaptador
                             JSONObject pokemons = response.getJSONObject(i);
-                            Adaptador data = new Adaptador(pokemons);
+                            PokemonData data = new PokemonData(
+                                    pokemons.getString("name"),
+                                    pokemons.getString("imagen")
+                            );
                             allThePokemons.add(data);
-                        }catch (JSONException e){
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
+
                     //Creamos un adaptador
                     Adaptador adapter = new Adaptador(allThePokemons, activity);
                     // Configuramos el RecyclerView con el adaptador que creamos antes y un LinearLayoutManager
                     recyclerView.setAdapter(adapter);
                     recyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
-        }
+                    }
+
     },
     new Response.ErrorListener(){
         @Override
