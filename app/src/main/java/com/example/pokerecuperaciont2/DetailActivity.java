@@ -16,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
@@ -30,7 +31,7 @@ import java.util.List;
 public class DetailActivity extends AppCompatActivity {
     private String nombre1;
     private ConstraintLayout mainLayout;
-    private String imagen;
+    private ImageView imagen;
     private ProgressBar progressBar;
     private String nombre2;
     private Activity activity = this;
@@ -41,12 +42,13 @@ public class DetailActivity extends AppCompatActivity {
         nombre1 = String.valueOf(findViewById(R.id.nameRespuesta));
         nombre2 = String.valueOf(findViewById(R.id.nameType));
         progressBar = findViewById(R.id.progress_bar);
-        imagen = String.valueOf(findViewById(R.id.imagen));
+        String imageView = getIntent().getStringExtra("imageView");
+        imagen = findViewById(R.id.imagen);
         mainLayout = findViewById(R.id.main_layout2);
         new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                JSONArrayRequestAuthenticated request = new JSONArrayRequestAuthenticated(
+                JsonArrayRequest request = new JsonArrayRequest(
                         Request.Method.GET,
                         "https://pokeapi.co/api/v2/pokemon",
                         null,
@@ -58,8 +60,7 @@ public class DetailActivity extends AppCompatActivity {
                                         //Convertimos cada objeto json en un Adaptador
                                         JSONObject pokemons = response.getJSONObject(i);
                                         nombre1 = pokemons.getString("name");
-                                        nombre2 = pokemons.getString("image_url");
-                                        imagen = pokemons.getString("name_type");
+                                        nombre2 = pokemons.getString("name_type");
 
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -68,7 +69,7 @@ public class DetailActivity extends AppCompatActivity {
                                 Snackbar.make(mainLayout,"Datos obtenidos de forma exitosa", Snackbar.LENGTH_SHORT).show();
                                 System.out.println(nombre1);
                                 System.out.print(nombre2);
-                                System.out.print(imagen);
+                               Util.downloadBitmapToImageView(imageView,this.imagen);
 
                             }
 
